@@ -1,0 +1,58 @@
+# API Framework
+fastapi==0.115.6
+uvicorn[standard]==0.32.1
+python-multipart==0.0.20
+
+# Config & Env
+pydantic==2.10.4
+pydantic-settings==2.7.0
+python-dotenv==1.0.1
+
+# LLM — Groq (OpenAI-compatible)
+groq==0.13.1
+openai==1.59.6
+
+# Embeddings — bge-m3 (local HuggingFace)
+sentence-transformers==3.3.1
+FlagEmbedding==1.3.3
+torch==2.5.1
+
+# Vector DB
+qdrant-client==1.12.1
+
+# Sparse Retrieval
+rank-bm25==0.2.2
+
+# Reranker
+FlagEmbedding==1.3.3  # bge-reranker-v2-m3 için
+
+# Document Parsing
+pymupdf==1.25.1          # PDF
+python-docx==1.1.2       # DOCX
+beautifulsoup4==4.12.3   # HTML
+unstructured==0.16.11    # Unified parser
+
+# Agent Framework
+langgraph==0.2.60
+langchain-core==0.3.28
+
+# Graph
+networkx==3.4.2
+python-louvain==0.16     # community detection
+
+# Evaluation
+ragas==0.2.11
+
+# Security & Auth
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+slowapi==0.1.9
+
+# Observability
+structlog==24.4.0
+
+# Utilities
+httpx==0.28.1
+tenacity==9.0.0          # retry/backoff
+aiofiles==24.1.0
+tqdm==4.67.1

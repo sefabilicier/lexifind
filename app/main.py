@@ -11,6 +11,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import get_settings
 from app.observability.logger import setup_logging, get_logger
 
+from app.api.routes import documents
+
+
+
 
 logger = get_logger(__name__)
 settings = get_settings()
@@ -21,7 +25,7 @@ async def lifespan(app: FastAPI):
     """Startup and shutdown events."""
     setup_logging()
     logger.info(
-        event="app.startup",
+        "app.startup",
         model=settings.groq_primary_model,
         embedding=settings.embedding_model,
         qdrant=f"{settings.qdrant_host}:{settings.qdrant_port}",
@@ -44,6 +48,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(documents.router)
 
 
 @app.get("/api/health", tags=["Health"])

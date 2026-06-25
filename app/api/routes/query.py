@@ -1,5 +1,5 @@
 """
-Query API endpoint.
+Query API endpoint — now with full RAG pipeline support.
 POST /api/query — hybrid retrieval + rerank + LLM generation.
 """
 
@@ -8,9 +8,8 @@ from pydantic import BaseModel, Field
 from qdrant_client import QdrantClient
 
 from app.config import get_settings
-from app.ingestion.embedder import BGEEmbedder
-from app.retrieval.hybrid_retriever import HybridRetriever
-from app.retrieval.reranker import BGEReranker
+from app.pipeline.naive_rag import NaiveRAGPipeline
+from app.pipeline.advanced_rag import AdvancedRAGPipeline
 from app.observability.logger import get_logger
 
 router = APIRouter(prefix="/api", tags=["Query"])
@@ -22,34 +21,34 @@ class QueryRequest(BaseModel):
     query: str = Field(..., min_length=3, max_length=2000)
     top_k: int = Field(default=10, ge=1, le=50)
     top_n: int = Field(default=3, ge=1, le=10)
-    pipeline: str = Field(default="hybrid", description="hybrid | dense | sparse")
-
-
-class ChunkResponse(BaseModel):
-    text: str
-    score: float
-    metadata: dict
+    pipeline: str = Field(
+        default="advanced",
+        description="naive | advanced"
+    )
 
 
 class QueryResponse(BaseModel):
-    query: str
-    chunks: list[ChunkResponse]
-    pipeline_used: str
+    answer: str
+    citations: list[dict]
+    usage: dict
+    pipeline: str
+    metadata: dict
 
 
 @router.post("/query", response_model=QueryResponse)
 async def query(request: QueryRequest):
     """
-    Retrieve relevant chunks for a query using hybrid search + reranking.
+    Run RAG pipeline for a legal document query.
+
+    Pipelines:
+    - naive    → retrieve + rerank + generate
+    - advanced → rewrite + multi-retrieve + dedupe + rerank + generate
     """
     try:
         client = QdrantClient(
             host=settings.qdrant_host,
             port=settings.qdrant_port,
         )
-        embedder = BGEEmbedder()
-        retriever = HybridRetriever(client=client, embedder=embedder)
-        reranker = BGEReranker()
 
         logger.info(
             "query.received",
@@ -57,28 +56,26 @@ async def query(request: QueryRequest):
             pipeline=request.pipeline,
         )
 
-        # 1. Hybrid retrieval
-        chunks = retriever.retrieve(request.query, top_k=request.top_k)
+        if request.pipeline == "naive":
+            pipeline = NaiveRAGPipeline(client=client)
+        else:
+            pipeline = AdvancedRAGPipeline(client=client)
 
-        # 2. Rerank
-        reranked = reranker.rerank(request.query, chunks, top_n=request.top_n)
-
-        logger.info(
-            "query.completed",
-            returned=len(reranked),
+        result = pipeline.run(
+            query=request.query,
+            top_k=request.top_k,
+            top_n=request.top_n,
         )
 
         return QueryResponse(
-            query=request.query,
-            chunks=[
-                ChunkResponse(
-                    text=c.text,
-                    score=round(c.score, 4),
-                    metadata=c.metadata,
-                )
-                for c in reranked
-            ],
-            pipeline_used="hybrid+rerank",
+            answer=result["answer"],
+            citations=result["citations"],
+            usage=result["usage"],
+            pipeline=result["pipeline"],
+            metadata={
+                k: v for k, v in result.items()
+                if k not in {"answer", "citations", "usage", "pipeline"}
+            },
         )
 
     except Exception as e:

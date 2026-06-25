@@ -13,6 +13,10 @@ from app.config import get_settings
 from app.ingestion.pipeline import IngestionPipeline
 from app.observability.logger import get_logger
 
+from app.graph.builder import LegalKnowledgeGraph
+from app.retrieval.dense_retriever import RetrievedChunk
+
+
 router = APIRouter(prefix="/api/documents", tags=["Documents"])
 logger = get_logger(__name__)
 settings = get_settings()
@@ -48,4 +52,56 @@ async def ingest_document(file: UploadFile = File(...)):
         import traceback
         traceback.print_exc()  # tam stack trace konsola yazdır
         logger.error("ingestion.failed", error=str(e), filename=file.filename)
+        raise HTTPException(status_code=500, detail=str(e))
+    
+    
+@router.post("/graph/build")
+async def build_graph():
+    """
+    Build the knowledge graph from all ingested chunks in Qdrant.
+    Run this after ingesting documents.
+    """
+    try:
+        client = QdrantClient(host=settings.qdrant_host, port=settings.qdrant_port)
+
+        # Scroll all chunks from Qdrant
+        all_chunks = []
+        offset = None
+
+        while True:
+            results, offset = client.scroll(
+                collection_name=settings.qdrant_collection,
+                limit=100,
+                offset=offset,
+                with_payload=True,
+            )
+            for r in results:
+                all_chunks.append({
+                    "id": str(r.id),
+                    "text": r.payload.get("text", ""),
+                })
+            if offset is None:
+                break
+
+        if not all_chunks:
+            raise HTTPException(
+                status_code=400,
+                detail="No chunks found. Ingest documents first.",
+            )
+
+        graph = LegalKnowledgeGraph()
+        stats = graph.build_from_chunks(all_chunks)
+
+        return {
+            "status": "graph built",
+            "nodes": stats.nodes,
+            "edges": stats.edges,
+            "components": stats.connected_components,
+            "chunks_processed": len(all_chunks),
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error("graph.build.failed", error=str(e))
         raise HTTPException(status_code=500, detail=str(e))

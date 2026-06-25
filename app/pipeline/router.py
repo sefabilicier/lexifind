@@ -100,7 +100,8 @@ class QueryRouter:
         mapping = {
             "simple": "naive",
             "complex": "advanced",
-            "multi_hop": "agentic",
+            #"multi_hop": "agentic",
+            "multi_hop": "graph",
             "uncertain": "corrective",
         }
         pipeline = mapping[label]

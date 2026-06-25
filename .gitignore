@@ -6,6 +6,9 @@ ENV/
 env.bak/
 venv.bak/
 
+# Graph cache
+data/graph_cache.json
+
 # Python
 __pycache__/
 *.py[cod]

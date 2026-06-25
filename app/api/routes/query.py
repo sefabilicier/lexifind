@@ -16,6 +16,8 @@ from app.pipeline.agentic_rag import AgenticRAGPipeline
 from app.pipeline.corrective_rag import CRAGPipeline
 from app.observability.logger import get_logger
 
+from app.pipeline.graph_rag import GraphRAGPipeline
+
 router = APIRouter(prefix="/api", tags=["Query"])
 logger = get_logger(__name__)
 settings = get_settings()
@@ -44,6 +46,7 @@ _PIPELINE_MAP = {
     "advanced": AdvancedRAGPipeline,
     "agentic": AgenticRAGPipeline,
     "corrective": CRAGPipeline,
+    "graph": GraphRAGPipeline,
 }
 
 

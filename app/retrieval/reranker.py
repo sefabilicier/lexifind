@@ -75,6 +75,12 @@ class BGEReranker:
 
         pairs = [[query, chunk.text] for chunk in chunks]
         scores: list[float] = self.model.compute_score(pairs, normalize=True)
+        
+        logger.info(
+            "reranker.scores",
+            raw_scores=[round(s, 4) for s in scores],
+            top_n=top_n,
+        )
 
         # Attach reranker scores
         for chunk, score in zip(chunks, scores):

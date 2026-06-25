@@ -37,10 +37,9 @@ class BGEEmbedder:
             return
 
         settings = get_settings()
+        
         logger.info(
-            "embedder.loading",
-            model=settings.embedding_model,
-            device=settings.embedding_device,
+            f"Loading embedder: model={settings.embedding_model}, device={settings.embedding_device}"
         )
 
         self.model = BGEM3FlagModel(
@@ -51,7 +50,8 @@ class BGEEmbedder:
         self.batch_size = settings.embedding_batch_size
         self._initialized = True
 
-        logger.info("BGE-M3 model loaded", event="embedder.ready")
+        logger.info("BGE-M3 model loaded successfully")
+        
 
     def embed_texts(
         self,

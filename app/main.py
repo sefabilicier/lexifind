@@ -12,6 +12,7 @@ from app.config import get_settings
 from app.observability.logger import setup_logging, get_logger
 
 from app.api.routes import documents
+from app.api.routes import documents, query
 
 
 
@@ -50,6 +51,7 @@ app.add_middleware(
 )
 
 app.include_router(documents.router)
+app.include_router(query.router)
 
 
 @app.get("/api/health", tags=["Health"])

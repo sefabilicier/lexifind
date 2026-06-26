@@ -15,6 +15,7 @@ from app.observability.logger import setup_logging, get_logger
 from app.api.middleware.auth import APIKeyMiddleware
 from app.api.middleware.rate_limit import limiter, rate_limit_exceeded_handler
 from app.api.routes import documents, query
+from app.api.routes import documents, query, evaluation
 
 logger = get_logger(__name__)
 settings = get_settings()
@@ -64,6 +65,7 @@ app.add_middleware(APIKeyMiddleware, valid_keys=_valid_keys)
 # ── Routers ────────────────────────────────────────────────────────────────────
 app.include_router(documents.router)
 app.include_router(query.router)
+app.include_router(evaluation.router)
 
 
 @app.get("/api/health", tags=["Health"])

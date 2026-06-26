@@ -1,0 +1,58 @@
+[
+  {
+    "id": "gs_001",
+    "question": "What programming languages are accepted for backend development?",
+    "ground_truth": "The accepted backend technologies include Go, Java/Spring Boot, Python/FastAPI, Node.js/NestJS, and other backend technologies.",
+    "pipeline": "naive",
+    "category": "technical_requirements"
+  },
+  {
+    "id": "gs_002",
+    "question": "What are the five RAG pipeline types required in the challenge?",
+    "ground_truth": "The five RAG pipeline types are: Naive RAG, Advanced RAG, Agentic RAG, Corrective RAG (CRAG), and Graph RAG.",
+    "pipeline": "advanced",
+    "category": "pipeline_requirements"
+  },
+  {
+    "id": "gs_003",
+    "question": "Which vector databases are mentioned as options?",
+    "ground_truth": "The vector databases mentioned include Qdrant, Weaviate, Pinecone, and ChromaDB.",
+    "pipeline": "naive",
+    "category": "technical_requirements"
+  },
+  {
+    "id": "gs_004",
+    "question": "What security measures must be implemented?",
+    "ground_truth": "Required security measures include prompt injection protection, rate limiting, and API key authentication.",
+    "pipeline": "advanced",
+    "category": "security_requirements"
+  },
+  {
+    "id": "gs_005",
+    "question": "What evaluation metrics are required for the RAG system?",
+    "ground_truth": "Required evaluation metrics include faithfulness, answer relevancy, context precision, and context recall, typically measured using RAGAS framework.",
+    "pipeline": "advanced",
+    "category": "evaluation_requirements"
+  },
+  {
+    "id": "gs_006",
+    "question": "What graph database or library should be used for Graph RAG?",
+    "ground_truth": "NetworkX or Neo4j can be used for Graph RAG implementation.",
+    "pipeline": "graph",
+    "category": "technical_requirements"
+  },
+  {
+    "id": "gs_007",
+    "question": "What is the purpose of the reranker in the RAG pipeline?",
+    "ground_truth": "The reranker performs a second-pass precision scoring using cross-encoder models to select the most relevant chunks before passing them to the LLM, reducing hallucination risk.",
+    "pipeline": "advanced",
+    "category": "pipeline_requirements"
+  },
+  {
+    "id": "gs_008",
+    "question": "Which embedding models are recommended?",
+    "ground_truth": "Recommended embedding models include BGE-M3, text-embedding-3-small, and other multilingual embedding models.",
+    "pipeline": "naive",
+    "category": "technical_requirements"
+  }
+]

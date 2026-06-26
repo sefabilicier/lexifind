@@ -1,0 +1,139 @@
+{
+  "generated_at": "2026-06-26T07:37:34.723611",
+  "summary": {
+    "total_questions": 8,
+    "avg_faithfulness": 0.375,
+    "avg_answer_relevancy": 0.2,
+    "avg_context_precision": 0.25,
+    "avg_context_recall": 0.1875,
+    "avg_overall": 0.2531
+  },
+  "per_category": {
+    "technical_requirements": 0.3,
+    "pipeline_requirements": 0.0,
+    "security_requirements": 0.825,
+    "evaluation_requirements": 0.0
+  },
+  "per_question": [
+    {
+      "id": "gs_001",
+      "category": "technical_requirements",
+      "pipeline": "naive",
+      "question": "What programming languages are accepted for backend development?",
+      "answer": "The accepted programming languages for backend development are: \n- Go\n- Java / Spring Boot\n- Python / FastAPI\n- Node.js / NestJS\n- Any other backend technology.\n\n[Source: tmpe2026_z_.pdf, Chunk: 5]",
+      "ground_truth": "The accepted backend technologies include Go, Java/Spring Boot, Python/FastAPI, Node.js/NestJS, and other backend technologies.",
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8,
+        "context_precision": 1.0,
+        "context_recall": 1.0,
+        "overall": 0.95
+      }
+    },
+    {
+      "id": "gs_002",
+      "category": "pipeline_requirements",
+      "pipeline": "advanced",
+      "question": "What are the five RAG pipeline types required in the challenge?",
+      "answer": "I cannot find this information in the provided documents.\n\n[Source: tmpe2026_z_.pdf | Chunk: 8]\n[Source: tmpe2026_z_.pdf | Chunk: 6]\n[Source: tmpe2026_z_.pdf | Chunk: 3]",
+      "ground_truth": "The five RAG pipeline types are: Naive RAG, Advanced RAG, Agentic RAG, Corrective RAG (CRAG), and Graph RAG.",
+      "scores": {
+        "faithfulness": 0.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "id": "gs_003",
+      "category": "technical_requirements",
+      "pipeline": "naive",
+      "question": "Which vector databases are mentioned as options?",
+      "answer": "I cannot find this information in the provided documents.\n\n[Source: tmpe2026_z_.pdf | Chunk: 2]\n[Source: tmpe2026_z_.pdf | Chunk: 5]\n[Source: tmpe2026_z_.pdf | Chunk: 6]",
+      "ground_truth": "The vector databases mentioned include Qdrant, Weaviate, Pinecone, and ChromaDB.",
+      "scores": {
+        "faithfulness": 0.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "id": "gs_004",
+      "category": "security_requirements",
+      "pipeline": "advanced",
+      "question": "What security measures must be implemented?",
+      "answer": "The security measures that must be implemented include: \n- Token ve secret yönetimi (Token and secret management)\n- Repository allowlist / denylist yaklaşımı (Repository allowlist/denylist approach)\n- Private repository güvenliği (Private repository security)\n- Workspace izolasyonu (Workspace isolat",
+      "ground_truth": "Required security measures include prompt injection protection, rate limiting, and API key authentication.",
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8,
+        "context_precision": 1.0,
+        "context_recall": 0.5,
+        "overall": 0.825
+      }
+    },
+    {
+      "id": "gs_005",
+      "category": "evaluation_requirements",
+      "pipeline": "advanced",
+      "question": "What evaluation metrics are required for the RAG system?",
+      "answer": "The evaluation metrics required for the RAG system are not explicitly stated in the provided context. \n\nI cannot find this information in the provided documents. \n\n[Source: tmpe2026_z_.pdf | Chunk: 2], [Source: tmpe2026_z_.pdf | Chunk: 8], [Source: tmpe2026_z_.pdf | Chunk: 3]",
+      "ground_truth": "Required evaluation metrics include faithfulness, answer relevancy, context precision, and context recall, typically measured using RAGAS framework.",
+      "scores": {
+        "faithfulness": 0.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "id": "gs_006",
+      "category": "technical_requirements",
+      "pipeline": "graph",
+      "question": "What graph database or library should be used for Graph RAG?",
+      "answer": "I cannot find this information in the provided documents.\n\n[Source: tmpe2026_z_.pdf | Chunk: 6]\n[Source: tmpe2026_z_.pdf | Chunk: 2]\n[Source: tmpe2026_z_.pdf | Chunk: 5]",
+      "ground_truth": "NetworkX or Neo4j can be used for Graph RAG implementation.",
+      "scores": {
+        "faithfulness": 0.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "id": "gs_007",
+      "category": "pipeline_requirements",
+      "pipeline": "advanced",
+      "question": "What is the purpose of the reranker in the RAG pipeline?",
+      "answer": "I cannot find this information in the provided documents.\n\n[Source: tmpe2026_z_.pdf, Chunk: 2]\n[Source: tmpe2026_z_.pdf, Chunk: 5]\n[Source: tmpe2026_z_.pdf, Chunk: 6]",
+      "ground_truth": "The reranker performs a second-pass precision scoring using cross-encoder models to select the most relevant chunks before passing them to the LLM, reducing hallucination risk.",
+      "scores": {
+        "faithfulness": 0.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "id": "gs_008",
+      "category": "technical_requirements",
+      "pipeline": "naive",
+      "question": "Which embedding models are recommended?",
+      "answer": "The recommended embedding models are not explicitly mentioned, but the following AI models are suggested for use: \n• OpenAI \n• Anthropic \n• Google Gemini \n• GitHub Copilot tabanlı akışlar \n• Local LLM \n• Başka bir AI modeli \n\n[Source: tmpe2026_z_.pdf | Chunk: 3]",
+      "ground_truth": "Recommended embedding models include BGE-M3, text-embedding-3-small, and other multilingual embedding models.",
+      "scores": {
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0,
+        "overall": 0.25
+      }
+    }
+  ]
+}

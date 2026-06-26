@@ -161,6 +161,9 @@ Provide a precise answer based solely on the context above."""
                         "You are a query optimization expert for legal document retrieval. "
                         "Rewrite the user's query to maximize retrieval precision. "
                         "Output ONLY the rewritten query, nothing else."
+                        "CRITICAL: Output ONLY a natural language search query. "
+                        "Never output SQL, code, or structured queries. "
+                        "Maximum 15 words. Plain English only."
                     ),
                 },
                 {

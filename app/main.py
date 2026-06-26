@@ -14,7 +14,7 @@ from app.config import get_settings
 from app.observability.logger import setup_logging, get_logger
 from app.api.middleware.auth import APIKeyMiddleware
 from app.api.middleware.rate_limit import limiter, rate_limit_exceeded_handler
-from app.api.routes import documents, query
+from app.security.api_key_manager import api_key_manager
 from app.api.routes import documents, query, evaluation
 
 logger = get_logger(__name__)
@@ -24,6 +24,10 @@ settings = get_settings()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     setup_logging()
+
+    # ── Generate in-memory API key at startup ──────────────────────────────
+    api_key_manager.generate()
+
     logger.info(
         "app.startup",
         model=settings.groq_primary_model,
@@ -41,11 +45,11 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# ── Rate limiter state ─────────────────────────────────────────────────────────
+# ── Rate limiter ───────────────────────────────────────────────────────────────
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, rate_limit_exceeded_handler)
 
-# ── Middleware (order matters — last added = first executed) ───────────────────
+# ── Middleware ─────────────────────────────────────────────────────────────────
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -53,16 +57,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.add_middleware(APIKeyMiddleware)   # artık valid_keys parametresi yok
 
-# API Key auth — reads valid keys from .env
-_valid_keys = {
-    k.strip()
-    for k in settings.api_keys.split(",")
-    if k.strip()
-}
-app.add_middleware(APIKeyMiddleware, valid_keys=_valid_keys)
-
-# ── Routers ────────────────────────────────────────────────────────────────────
+# ── Routers ───────────────────────────────────────────────────────────────────
 app.include_router(documents.router)
 app.include_router(query.router)
 app.include_router(evaluation.router)

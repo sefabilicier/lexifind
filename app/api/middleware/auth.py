@@ -1,29 +1,19 @@
 """
 API Key authentication middleware.
-
-Simple but production-ready API key auth:
-  - Key passed via X-API-Key header
-  - Keys stored in .env (comma-separated for multiple clients)
-  - Public endpoints (health, docs) are exempt
-
-For production upgrade path: replace with JWT or OAuth2.
-
-Reference:
-  - FastAPI security best practices
-  - OWASP API Security Top 10: API2 — Broken Authentication
+Validates X-API-Key header against the in-memory generated key.
 """
 
-from fastapi import Request, HTTPException
+from fastapi import Request
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
+from app.security.api_key_manager import api_key_manager
 from app.config import get_settings
 from app.observability.logger import get_logger
 
 logger = get_logger(__name__)
 settings = get_settings()
 
-# Endpoints that do NOT require authentication
 _PUBLIC_PATHS = {
     "/api/health",
     "/docs",
@@ -35,15 +25,10 @@ _PUBLIC_PATHS = {
 class APIKeyMiddleware(BaseHTTPMiddleware):
     """
     Validates X-API-Key header on all protected endpoints.
-    Returns 401 for missing key, 403 for invalid key.
+    Key is resolved from in-memory APIKeyManager — no .env lookup.
     """
 
-    def __init__(self, app, valid_keys: set[str]):
-        super().__init__(app)
-        self.valid_keys = valid_keys
-
     async def dispatch(self, request: Request, call_next):
-        # Skip auth for public paths
         if request.url.path in _PUBLIC_PATHS:
             return await call_next(request)
 
@@ -60,7 +45,7 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
                 content={"detail": "Missing API key. Include X-API-Key header."},
             )
 
-        if api_key not in self.valid_keys:
+        if not api_key_manager.is_valid(api_key):
             logger.warning(
                 "security.auth.invalid_key",
                 path=request.url.path,

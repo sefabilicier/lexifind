@@ -34,7 +34,7 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     jwt_expire_minutes: int = 60
     api_key_header: str = "X-API-Key"
-    api_keys: str = "dev-secret-key-change-in-production"
+    # api_keys: str = "dev-secret-key-change-in-production"
 
     # ── Rate Limiting ────────────────────────────
     rate_limit_per_minute: int = 30
